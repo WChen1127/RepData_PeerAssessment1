@@ -51,8 +51,17 @@ Show any code that is needed to
 2. Process/transform the data (if necessary) into a format suitable for your analysis.
 
 
-```{r}
+
+```r
 data <- read.csv("activity.csv")
+```
+
+```
+## Warning: cannot open file 'activity.csv': No such file or directory
+```
+
+```
+## Error: cannot open the connection
 ```
 
 ### What is mean total number of steps taken per day?
@@ -63,23 +72,80 @@ For this part of the assignment, you can ignore the missing values in the datase
 2. Calculate and report the **mean** and **median** total number of steps taken per day
 
 
-```{r}
+
+```r
 # clean up the data, removing all "NA"
 data_nna <- subset(data, data$steps != "NA")
-library(reshape)
+```
 
+```
+## Error: object of type 'closure' is not subsettable
+```
+
+```r
+library(reshape)
+```
+
+```
+## Loading required package: plyr
+## 
+## Attaching package: 'reshape'
+## 
+## The following objects are masked from 'package:plyr':
+## 
+##     rename, round_any
+```
+
+```r
 # reshape the data based on "date"
 mdata <- melt(data_nna, id = "date")
+```
+
+```
+## Error: object 'data_nna' not found
+```
+
+```r
 daydata <- cast(mdata, date ~ variable, sum)
+```
+
+```
+## Error: object 'mdata' not found
+```
+
+```r
 hist(daydata$steps, 
      main = "Histogram of the daily total steps",
      xlab = "daily total steps")
+```
 
+```
+## Error: object 'daydata' not found
+```
+
+```r
 # calculate the mean and median
 summ_step <- summary(daydata$steps)
-summ_step[['Mean']]
-summ_step[["Median"]]
+```
 
+```
+## Error: object 'daydata' not found
+```
+
+```r
+summ_step[['Mean']]
+```
+
+```
+## Error: object 'summ_step' not found
+```
+
+```r
+summ_step[["Median"]]
+```
+
+```
+## Error: object 'summ_step' not found
 ```
 
 
@@ -89,18 +155,49 @@ summ_step[["Median"]]
 
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
-```{r}
+
+```r
 # reshape the data based on "interval"
 mdata2 <- melt(data_nna[, -2], id = "interval")
+```
+
+```
+## Error: object 'data_nna' not found
+```
+
+```r
 intdata <- cast(mdata2, interval ~ variable, mean)
+```
+
+```
+## Error: object 'mdata2' not found
+```
+
+```r
 plot(x = intdata$interval, y = intdata$steps,
      type = "l", main = "Average steps in each interval",
      xlab = "interval", ylab = "average steps")
+```
 
+```
+## Error: object 'intdata' not found
+```
+
+```r
 # the location of the maximum steps
 ind <- which.max(intdata$steps)
-intdata$interval[ind]
+```
 
+```
+## Error: object 'intdata' not found
+```
+
+```r
+intdata$interval[ind]
+```
+
+```
+## Error: object 'intdata' not found
 ```
 
 ### Imputing missing values
@@ -115,31 +212,88 @@ Note that there are a number of days/intervals where there are missing values (c
 
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
-```{r}
+
+```r
 # the total number of "NA"s
 summ_steps <- summary(data$steps)
-summ_steps[["NA's"]]
+```
 
+```
+## Error: object of type 'closure' is not subsettable
+```
+
+```r
+summ_steps[["NA's"]]
+```
+
+```
+## Error: object 'summ_steps' not found
+```
+
+```r
 # locate all "NA"s
 ind_na <- which(is.na(data$steps)) 
+```
 
+```
+## Error: object of type 'closure' is not subsettable
+```
+
+```r
 # define each "NA" with the mean for that 5-minute interval
 for(i in ind_na){
   ival <- data$interval[i]
   data$steps[i] <- intdata$steps[intdata$interval == ival]
 }
+```
 
+```
+## Error: object 'ind_na' not found
+```
+
+```r
 # reshape the data based on the date
 mdata3 <- melt(data, id = "date")
 daydata2 <- cast(mdata3, date ~ variable, sum)
+```
+
+```
+## Error: object of type 'closure' is not subsettable
+```
+
+```r
 hist(daydata2$steps, 
      main = "Histogram of the daily total steps",
      xlab = "daily total steps")
+```
 
+```
+## Error: object 'daydata2' not found
+```
+
+```r
 # calculate the mean and median
 summ_step2 <- summary(daydata2$steps)
+```
+
+```
+## Error: object 'daydata2' not found
+```
+
+```r
 summ_step2[['Mean']]
+```
+
+```
+## Error: object 'summ_step2' not found
+```
+
+```r
 summ_step2[["Median"]]
+```
+
+```
+## Error: object 'summ_step2' not found
 ```
 
 Note: both the **mean** and **median** are not changed, since I impute the missing data with the  mean for that 5-minute interval. Under such strategy, the **mean** is definitely remained while the "median" may change. 
@@ -152,7 +306,8 @@ For this part the weekdays() function may be of some help here. Use the dataset 
 
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). The plot should look something like the following, which was creating using simulated data:
 
-```{r}
+
+```r
 # a function to convert "date" to "weekdays"
 weekday_f <- function(date){
   wds <- weekdays(as.POSIXct(date))
@@ -160,25 +315,94 @@ weekday_f <- function(date){
   return(wd)
 }
 data$weekdays <- lapply(data$date, weekday_f)
+```
 
+```
+## Error: object of type 'closure' is not subsettable
+```
+
+```r
 # subset of "weekday"
 data_wkd <- subset(data, data$weekdays == "weekday")
-mdata_wkd <- melt(data_wkd[,-c(2, 4)], id = "interval")
-intdata_wkd <- cast(mdata_wkd, interval ~ variable, mean)
-intdata_wkd$weekday <- "weekday"
+```
 
+```
+## Error: object of type 'closure' is not subsettable
+```
+
+```r
+mdata_wkd <- melt(data_wkd[,-c(2, 4)], id = "interval")
+```
+
+```
+## Error: object 'data_wkd' not found
+```
+
+```r
+intdata_wkd <- cast(mdata_wkd, interval ~ variable, mean)
+```
+
+```
+## Error: object 'mdata_wkd' not found
+```
+
+```r
+intdata_wkd$weekday <- "weekday"
+```
+
+```
+## Error: object 'intdata_wkd' not found
+```
+
+```r
 # subset of "weekend"
 data_wkend <- subset(data, data$weekdays == "weekend")
-mdata_wkend <- melt(data_wkend[,-c(2, 4)], id = "interval")
-intdata_wkend<- cast(mdata_wkend, interval ~ variable, mean)
-intdata_wkend$weekday <- "weekend"
+```
 
+```
+## Error: object of type 'closure' is not subsettable
+```
+
+```r
+mdata_wkend <- melt(data_wkend[,-c(2, 4)], id = "interval")
+```
+
+```
+## Error: object 'data_wkend' not found
+```
+
+```r
+intdata_wkend<- cast(mdata_wkend, interval ~ variable, mean)
+```
+
+```
+## Error: object 'mdata_wkend' not found
+```
+
+```r
+intdata_wkend$weekday <- "weekend"
+```
+
+```
+## Error: object 'intdata_wkend' not found
+```
+
+```r
 # aggregate "weekday" and "weekend" subsets
 aggdata <- rbind(intdata_wkd, intdata_wkend)
+```
 
+```
+## Error: object 'intdata_wkd' not found
+```
+
+```r
 library(lattice)
 xyplot(steps ~ interval | weekday, data=aggdata, type="l")
+```
 
+```
+## Error: object 'aggdata' not found
 ```
 
 
